@@ -1,6 +1,11 @@
 err=[1 0.05 0.005];
 vpoint=[42];
-data=csvread('PSA.csv');
+fid=fopen('PSA.csv');
+csv_data=textscan(fid, '%f,%f,%f,%f,%f,%s');
+data=cell2mat(csv_data(1:5));
+str_data=csv_data(6);
+str_data=str_data{1};
+fclose(fid);
 n=length(data);
 time=datenum(num2str(data(:,2)),'yyyymmdd');
 timestr=datestr(time,'yyyy-mm-dd');
@@ -12,7 +17,7 @@ set(gcf,'position',[0,0,1440,900]);
 plot_main(time, data(:,3), vpoint);
 %plot(time,data(:,3),'.-','MarkerSize',10);
 grid on;
-title('PSA plot');
+title('PSA plot (共计10年)');
 legend('PSA');
 ylim([0 37.5]);
 set(gca,'YMinorGrid','on')
@@ -22,7 +27,7 @@ set(gcf,'position',[0,0,1440,900]);
 plot_main(time, data(:,4), vpoint);
 %plot(time,data(:,4),'.-','MarkerSize',10);
 grid on;
-title('fPSA plot');
+title('fPSA plot (共计10年)');
 legend('fPSA');
 ylim([0 2.5]);
 set(gca,'YMinorGrid','on')
@@ -51,24 +56,24 @@ for i=1:2
         symbol=0;
         if(j==1)
             symbol=-3;
-        elseif(j==n-8 && i==1)
-            symbol=9;
-        elseif(j==n-7)
-            symbol=15;
-        elseif(j==n-6)
-            symbol=13;
-        elseif(j==n-5)
-            symbol=11;
-        elseif(j==n-4)
-            symbol=9;
-        elseif(j==n-3)
-            symbol=7;
-        elseif(j==n-2)
-            symbol=5;
-        elseif(j==n-1)
-            symbol=3;
         elseif(j==n)
             symbol=1;
+        elseif(j>=1&&data(j,i+2)==data(j-1,i+2))
+            symbol=0;
+        elseif(j==n-11 && i==1)
+            symbol=9;
+        elseif(j==n-10)
+            symbol=13;
+        elseif(j==n-9)
+            symbol=11;
+        elseif(j==n-8)
+            symbol=9;
+        elseif(j==n-7)
+            symbol=7;
+        elseif(j==n-6)
+            symbol=5;
+        elseif(j==n-5)
+            symbol=3;
         elseif(data(j,i+2)>data(j+1,i+2)&&flag(j))
             symbol=1;
         elseif(flag(j))
@@ -85,7 +90,15 @@ for i=1:2
         end
         if(symbol~=0)    
             line(time(j)+[0,50],data(j,i+2)+[0,symbol*err(i)/2],'LineStyle',':');
-            text(time(j)+50,data(j,i+2)+symbol*err(i)/2,[num2str(data(j,i+2)) ' (' timestr(j,:) ')']);
+            normal_data=str_data{j};
+            extra_data='';
+            max_len=9;
+            if length(str_data{j})>max_len
+                extra_data=normal_data(max_len+1:end);
+                normal_data=normal_data(1:max_len);
+            end
+            text_str={[num2str(data(j,i+2)) ' (' timestr(j,:) ') ' normal_data], extra_data};
+            text(time(j)+50,data(j,i+2)+symbol*err(i)/2,text_str);
             num=num+1;
         end
     end
