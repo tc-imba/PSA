@@ -17,7 +17,7 @@ set(gcf,'position',[0,0,1440,900]);
 plot_main(time, data(:,3), vpoint);
 %plot(time,data(:,3),'.-','MarkerSize',10);
 grid on;
-title('PSA plot (共计10年)');
+title('PSA plot (共计11年)');
 legend('PSA');
 ylim([0 37.5]);
 set(gca,'YMinorGrid','on')
@@ -27,7 +27,7 @@ set(gcf,'position',[0,0,1440,900]);
 plot_main(time, data(:,4), vpoint);
 %plot(time,data(:,4),'.-','MarkerSize',10);
 grid on;
-title('fPSA plot (共计10年)');
+title('fPSA plot (共计11年)');
 legend('fPSA');
 ylim([0 2.5]);
 set(gca,'YMinorGrid','on')
@@ -39,9 +39,9 @@ set(gca,'YMinorGrid','on')
 % ylim([0.05 0.11]);
 for i=1:2
     figure(i);
-    xlim([0 4000]);
-    set(gca,'XTick',365.25:365.25:365.25*10);  
-    set(gca,'XTickLabel',{1:10});
+    xlim([0 4500]);
+    set(gca,'XTick',365.25:365.25:365.25*11);  
+    set(gca,'XTickLabel',{1:11});
     xlabel('year');
     legend(gca,'off');
     flag=ones(n);
@@ -60,19 +60,19 @@ for i=1:2
             symbol=1;
         elseif(j>=1&&data(j,i+2)==data(j-1,i+2))
             symbol=0;
-        elseif(j==n-11 && i==1)
+        elseif(j==n-18 && i==1)
             symbol=9;
-        elseif(j==n-10)
+        elseif(j==n-17)
             symbol=13;
-        elseif(j==n-9)
+        elseif(j==n-16)
             symbol=11;
-        elseif(j==n-8)
+        elseif(j==n-15)
             symbol=9;
-        elseif(j==n-7)
+        elseif(j==n-14)
             symbol=7;
-        elseif(j==n-6)
+        elseif(j==n-13)
             symbol=5;
-        elseif(j==n-5)
+        elseif(j==n-12)
             symbol=3;
         elseif(data(j,i+2)>data(j+1,i+2)&&flag(j))
             symbol=1;
